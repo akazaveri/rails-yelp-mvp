@@ -6,19 +6,29 @@
   <br>
   <div class="card p-3 mb-5">
     <h3>Reviews</h3>
-    <% if @reviews != [] %>
+    <% if @restaurant.reviews.empty? %>
+      <p class="m-0">No reviews yet.</p>
+    <% else %>
       <ul class="list-group">
-        <% @reviews.each do |review| %>
+        <% @restaurant.reviews.each do |review| %>
           <li class="list-group-item"><%= review.content %> | <%= '⭐️' * review.rating %></li>
         <% end %>
       </ul>
-    <% else %>
-      <p class="m-0">No reviews yet.</p>
     <% end %>
+
+    <div class="container mt-5 p-0">
+      <h4>Add a new review</h4>
+      <div>
+        <%= simple_form_for [@restaurant, @review] do |f| %>
+          <strong><%= f.input :rating, collection: Review::RATING %></strong>
+          <strong><%= f.input :content %></strong>
+          <%= f.submit class: "btn btn-primary"%>
+        <% end %>
+      </div>
+    </div>
   </div>
 
   <div>
-    <%= link_to "Add a review", new_restaurant_review_path(@restaurant), class: "btn btn-primary me-2" %>
-    <%= link_to "Back to Restaurants", restaurants_path, class: "btn btn-light me-2 border border-secondary" %>
+    <%= link_to "Back to Restaurants", restaurants_path, class: "btn btn-light me-2 border border-secondary mb-5" %>
   </div>
 </div>
